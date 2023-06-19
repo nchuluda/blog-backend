@@ -1,0 +1,28 @@
+{
+  "title": "Wild Fermentation Blog",
+  "author": "Sandor Katz",
+  "url": "https://www.wildfermentation.com/fermentation-blog/",
+  "likes": 5
+}
+
+
+{
+  "title": "Fermented Food Lab",
+  "author": "Danielle Raminez",
+  "url": "https://www.fermentedfoodlab.com/blog/",
+  "likes": 3
+}
+
+{
+  "title": "Make Sauerkraut!",
+  "author": "Holly Howe",
+  "url": "https://www.makesauerkraut.com/blog/",
+  "likes": 2
+}
+
+{
+  "title": "Mr. Kimchi Blog",
+  "author": "Seung Hyun",
+  "url": "https://mrkimchi.co.uk/blog/",
+  "likes": 4
+}
