@@ -7,6 +7,16 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
 
+beforeEach(async () => {
+  await Blog.deleteMany({})
+
+  let blogObject = new Blog(helper.initialBlogs[0])
+  await blogObject.save()
+
+  blogObject = new Blog(helper.initialBlogs[1])
+  await blogObject.save()
+})
+
 test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
@@ -70,6 +80,52 @@ test('blog added without likes defaults to 0 likes', async () => {
     .expect('Content-Type', /application\/json/)
 
   expect(result.body.likes).toBe(0)
+})
+
+test('blog added without title or url is rejected', async () => {
+  const blogWithoutTitle = {
+    author: "Mr. Ghost",
+    url: "https://fakedomainname.com",
+    likes: 10
+  }
+
+  const blogWithoutUrl = {
+    title: "Invisible Blog",
+    author: "Mr. Ghost",
+    likes: 10
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithoutTitle)
+    .expect(400)
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithoutUrl)
+    .expect(400)
+
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
+})
+
+test('a blog can be deleted', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  expect(blogsAtEnd).toHaveLength(
+    helper.initialBlogs.length - 1
+  )
+
+  const titles = blogsAtEnd.map(r => r.title)
+
+  expect(titles).not.toContain(blogToDelete.title)
 })
 
 afterAll(async () => {
