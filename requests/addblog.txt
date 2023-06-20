@@ -5,7 +5,6 @@
   "likes": 5
 }
 
-
 {
   "title": "Fermented Food Lab",
   "author": "Danielle Raminez",
