@@ -22,14 +22,32 @@ const mostBlogs = (blogs) => {
     if (blogs.length === 0) {
         return "Blog list empty"
     }
-    
-    const { author }  = _.maxBy(blogs, (blog) => blog.author)
-    const totalBlogs = blogs.reduce((sum, e) => e.author === author ? sum + 1 : sum, 0)
 
-    return {
-        author: author,
-        blogs: totalBlogs
+    const mostBlogs = _(blogs)
+        .groupBy("author")
+        .map((author, id) => ({
+            author: id,
+            blogs: author.length
+        }))
+        .maxBy("blogs")
+    
+    return mostBlogs
+}
+
+const mostLikes = (blogs) => {
+    if (blogs.length === 0) {
+        return "Blog list empty"
     }
+
+    const mostLikes = _(blogs)
+        .groupBy("author")
+        .map((author, id) => ({
+            author: id,
+            likes: _.sumBy(author, "likes")
+        }))
+        .maxBy("likes")
+
+    return mostLikes
 }
 
 const totalLikes = (blogs) => {
@@ -41,5 +59,6 @@ module.exports = {
   dummy,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
   totalLikes
 }
